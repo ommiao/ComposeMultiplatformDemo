@@ -1,0 +1,7 @@
+.DS_Store
+**/.DS_Store
+/.gradle/
+/build/
+/composeApp/.gradle/
+/composeApp/build/
+/.idea/
