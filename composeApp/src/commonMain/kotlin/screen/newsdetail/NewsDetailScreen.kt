@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -99,11 +100,16 @@ private fun NewsDetailContent(newsDetail: NewsDetail) {
         ),
         verticalArrangement = Arrangement.spacedBy(Appearance.spacing.extraSmall)
     ) {
-        items(newsDetail.items) {
-            when (it.type) {
-                "text" -> NewsDetailText(text = it.content)
-                "img" -> NewsDetailImage(imageUrl = it.imageUrl!!)
-                "video" -> NewsDetailVideo(videoUrl = it.videoUrl!!)
+        items(newsDetail.items) { item ->
+            when (item.type) {
+                "text" -> NewsDetailText(text = item.content)
+                "img" -> item.imageUrl?.let {
+                    NewsDetailImage(imageUrl = it)
+                }
+
+                "video" -> item.videoUrl?.let {
+                    NewsDetailVideo(imageUrl = item.imageUrl)
+                }
             }
         }
         item {
@@ -133,17 +139,25 @@ private fun NewsDetailImage(imageUrl: String) {
 }
 
 @Composable
-private fun NewsDetailVideo(videoUrl: String) {
+private fun NewsDetailVideo(imageUrl: String?) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Appearance.colors.backgroundSecondaryBase)
-            .border(color = Appearance.colors.borderDisabled, width = 1.dp)
     ) {
+        AsyncImage(
+            modifier = Modifier.fillMaxWidth().aspectRatio(1.8f),
+            model = imageUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
         Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = "Video not supported!",
-            color = Appearance.colors.textSecondary,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .background(Appearance.colors.backgroundSelected, shape = RoundedCornerShape(25))
+                .padding(Appearance.spacing.extraSmall),
+            text = "VIDEO",
+            color = Appearance.colors.textInverted,
             style = Appearance.typography.body01
         )
     }

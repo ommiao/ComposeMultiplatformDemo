@@ -13,5 +13,5 @@ data class NewsDetailItem(
     val type: String,
     val content: String,
     val imageUrl: String?,
-    val videoUrl: String?
+    val videoUrl: List<String>?
 )
